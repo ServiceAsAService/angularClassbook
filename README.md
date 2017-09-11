@@ -33,6 +33,97 @@ Falls ihr das abweichend konfiguriert habt, dann bitte im Text schreiben. Danke.
 
 ---
 
+# Notizen
+```
+1. das Speichern der Kurse je Student im LocalStorage ist Fehlerhaft
+beim neu laden der Seite werden diese nicht mehr automatisch ausgewählt
+
+
+Lösung (nicht das komplette Objekt sondern nur den Namen bei ngValue
+verwenden), Achtung Nachteil wird ein Kurs umbenannt geht die Verbindung
+verloren, normalerweise würde man hier eine eindeutige ID verwenden und
+diese verwenden wenn vorhanden.
+
+<select style="width: 300px;" multiple [(ngModel)]="current.courses"
+size="5">
+
+ <option *ngFor="let c of dataService.courses"
+_[NGVALUE]=__"C.NAME"_>{{c.name}}</option>
+
+</select>
+
+2. Optional für das Speichern im LocalStorage nur ein Objekt verwenden
+(vermeidet eventuell vorkommende nullpointer beim Aufruf):
+
+CONSTRUCTOR() {
+
+ IF (_LOCALSTORAGE_.getItem("DATA") == NULL) {
+
+ LET s = NEW Student("HANS", "MÜLLER", 123456);
+
+ THIS.STUDENTS.push(s);
+
+ THIS.COURSES.push(NEW Course("INF16A"));
+
+ } ELSE {
+
+ THIS.get();
+
+ }
+
+}
+
+save() {
+
+ LET s = {STUDENTS: THIS.STUDENTS, COURSES: THIS.COURSES};
+
+ _LOCALSTORAGE_.setItem("DATA", _JSON_.stringify(s));
+
+}
+
+get() {
+
+ LET data = _JSON_.parse(_LOCALSTORAGE_.getItem("DATA"));
+
+ THIS.COURSES = data.COURSES;
+
+ THIS.STUDENTS = data.STUDENTS;
+
+}
+
+3. Eigenes HTML verwenden
+
+in der src/index.html sowie app/app.component.html darf auch ein anderes
+template verwendet werden, zu beachten ist hier:
+
+im head wird
+
+<BASE HREF="/">
+
+benötigt
+
+bilder/ css files etc.. im Ordner assets ablegen und natürlich darauf
+Verlinken
+
+und innerhalb des Bodys
+
+<APP-ROOT></APP-ROOT>
+
+hier wird die app.component.html
+
+geladen
+
+in dieser ist es wichtig
+
+<ROUTER-OUTLET></ROUTER-OUTLET>
+
+dort zu verwenden wo der Inhalt der einzelnen components angezeigt
+werden soll.
+```
+
+---
+---
+
 # Classbook
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.4.1.
