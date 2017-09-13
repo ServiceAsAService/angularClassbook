@@ -14,7 +14,8 @@ Die Daten müssen bei einem Neuladen der  Applikation resp. des Browser oder auc
 * Notizen für einen Schüler auflisten, anlegen, bearbeiten, löschen  
   Attribute: Text, Zeitstempel, Verweis auf Lehrer (der die Notiz angelegt hat), Verweis auf Schüler
 * Logout
-Die obigen Funktionalitäten sind Mindestfunktionen.
+
+Die obigen Funktionalitäten sind Mindestfunktionen.  
 Man darf kreativ sein, aber am Thema bleiben.
 ## Folgende zusätzliche Funktionalität
 1. Dashboard / Klassenübersicht
