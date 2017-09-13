@@ -7,26 +7,12 @@ import { NotesComponent } from './notes/notes.component';
 import { LoginComponent } from './login/login.component';
     
 const routes: Routes = [
-    {
-        path: '',
-        component: LoginComponent,
-    },
-    {
-        path: 'class',
-        component: ClassComponent
-    },
-    {
-        path: 'teacher',
-        component: TeacherComponent
-    },
-    {
-        path: 'pupil',
-        component: PupilComponent
-    },
-    {
-        path: 'notes',
-        component: NotesComponent
-    }
+    { path: '', redirectTo: '/login', pathMatch: 'full' },
+    { path: 'login',      component: LoginComponent, },
+    { path: 'class',      component: ClassComponent },
+    { path: 'teacher',    component: TeacherComponent },
+    { path: 'pupil',      component: PupilComponent },
+    { path: 'notes',      component: NotesComponent }
 ];
 
 @NgModule({
