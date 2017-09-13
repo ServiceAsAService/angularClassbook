@@ -2,10 +2,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app-routing.module';
 import { TeacherComponent } from './teacher/teacher.component';
 import { ClassComponent } from './class/class.component';
 import { PupilComponent } from './pupil/pupil.component';
 import { NotesComponent } from './notes/notes.component';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -13,10 +15,12 @@ import { NotesComponent } from './notes/notes.component';
     TeacherComponent,
     ClassComponent,
     PupilComponent,
-    NotesComponent
+    NotesComponent,
+    LoginComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
