@@ -1,25 +1,32 @@
 import {Component, OnInit} from '@angular/core';
-import {FormGroup} from "@angular/forms";
+import {Router} from "@angular/router";
+import {LoginService} from "../login.service";
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
+  providers: [LoginService]
 })
 export class LoginComponent implements OnInit {
 
-  loginForm: FormGroup;
+  wrongCredentials: boolean = false;
 
   model = {user: "", pass: ""};
 
-  constructor() {
+  constructor(private router: Router, private loginService: LoginService) {
   }
 
   ngOnInit() {
   }
 
   onSubmit() {
-    console.log(this.model);
+    if(this.loginService.authenticate(this.model.user, this.model.pass)) {
+      this.wrongCredentials = false;
+      this.router.navigate(['/dashboard']);
+    }
+    else
+      this.wrongCredentials = true;
   }
 
 }

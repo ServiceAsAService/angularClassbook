@@ -11,6 +11,8 @@ import { ClassComponent } from './class/class.component';
 import { PupilComponent } from './pupil/pupil.component';
 import { NotesComponent } from './notes/notes.component';
 import { LoginComponent } from './login/login.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { LogoutComponent } from './logout/logout.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,9 @@ import { LoginComponent } from './login/login.component';
     ClassComponent,
     PupilComponent,
     NotesComponent,
-    LoginComponent
+    LoginComponent,
+    DashboardComponent,
+    LogoutComponent
   ],
   imports: [
     BrowserModule,

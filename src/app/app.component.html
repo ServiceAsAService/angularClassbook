@@ -1,10 +1,16 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="/">Klassenbuch</a>
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">Klassenbuch</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li *ngIf="logoutVisible()"><a routerLink="/logout">Logout</a></li>
+            </ul>
+        </div>
     </div>
-  </div>
+
 </nav>
 <router-outlet></router-outlet>
 
