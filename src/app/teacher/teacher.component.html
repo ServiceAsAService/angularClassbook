@@ -1,3 +1,24 @@
 <p>
   teacher works!
 </p>
+<button (click)="log()">ID?</button>
+<div *ngIf="!id">
+  <div class="container">
+    <table class="table table-hover">
+      <tr>
+        <th>Vorname</th>
+        <th>Nachname</th>
+        <th>E-Email</th>
+      </tr>
+      <tr class="clickable" *ngFor="let teacher of dataService.getTeachers()" routerLink="/teacher/{{teacher.id}}">
+        <td>{{teacher.firstName}}</td>
+        <td>{{teacher.lastName}}</td>
+        <td><a href="mailto:{{teacher.mail}}">{{teacher.mail}}</a></td>
+      </tr>
+    </table>
+  </div>
+</div>
+<div *ngIf="id">
+  Detailansicht
+</div>
+

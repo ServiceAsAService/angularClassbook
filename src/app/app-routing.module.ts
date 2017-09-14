@@ -10,13 +10,14 @@ import {LogoutComponent} from "./logout/logout.component";
 
 const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
-    { path: 'login',      component: LoginComponent },
-    { path: 'logout',     component: LogoutComponent },
-    { path: 'class',      component: ClassComponent },
-    { path: 'teacher',    component: TeacherComponent },
-    { path: 'pupil',      component: PupilComponent },
-    { path: 'notes',      component: NotesComponent },
-    { path: 'dashboard',  component: DashboardComponent}
+    { path: 'login',       component: LoginComponent },
+    { path: 'logout',      component: LogoutComponent },
+    { path: 'class',       component: ClassComponent },
+    { path: 'teacher',     component: TeacherComponent },
+    { path: 'teacher/:id', component: TeacherComponent },
+    { path: 'pupil',       component: PupilComponent },
+    { path: 'notes',       component: NotesComponent },
+    { path: 'dashboard',   component: DashboardComponent}
 ];
 
 @NgModule({
