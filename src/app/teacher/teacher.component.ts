@@ -1,5 +1,5 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {Component, OnInit, OnDestroy, ViewChild, TemplateRef} from '@angular/core';
+import {ActivatedRoute, Router} from "@angular/router";
 import {DataService} from "../data.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 
@@ -14,31 +14,55 @@ export class TeacherComponent implements OnInit, OnDestroy {
   id: string;
   private sub: any;
 
-  model = {firstName: "", lastName: "", email: "", pass: ""};
+  model = {firstName: "", lastName: "", mail: "", pass: ""};
 
-  constructor(private route: ActivatedRoute, private dataService: DataService, private modalService: NgbModal) { }
+  constructor(private route: ActivatedRoute,
+              private dataService: DataService,
+              private modalService: NgbModal,
+              private router: Router) {
+  }
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
       this.id = params['id']; //get ID from route parameter
-    });
-  }
-
-  log(l) {
-    console.log(l);
-  }
-
-  add(content) {
-    this.modalService.open(content).result.then((res) => {
-      console.log(`closed with`, res);
-      if(res) {
-        this.dataService.addTeacher(res.firstName, res.lastName, res.email, res.pass);
+      if (this.id) {
+        this.model = this.dataService.getTeacher(this.id);
       }
-    }, (reason) => {/*dismissed*/});
+    });
   }
 
   ngOnDestroy() {
     this.sub.unsubscribe();
+  }
+
+  formInvalid() {
+    return !(this.model.firstName && this.model.lastName && this.model.mail && this.model.pass);
+  }
+
+  add(template) {
+    this.modalService.open(template).result.then((res) => {
+      if (res) { //if modal got closed with data
+        this.dataService.addTeacher(this.model.firstName, this.model.lastName, this.model.mail, this.model.pass);
+      }
+    }, (reason) => {/*dismissed*/
+    });
+  }
+
+  update(id) {
+    console.log(this.model);
+    this.dataService.updateTeacher(id, this.model.firstName, this.model.lastName, this.model.mail, this.model.pass);
+    this.router.navigate(['/teacher']);
+  }
+
+  @ViewChild('deleteQuestion') deleteQuestion; //get template from HTML
+  delete(id) {
+    this.modalService.open(this.deleteQuestion).result.then((reallyDelete) => {
+        if (reallyDelete)
+          this.dataService.removeTeacher(id);
+      },
+      (reason) => { //dismissed
+      })
+
   }
 
 }

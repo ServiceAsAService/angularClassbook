@@ -1,8 +1,9 @@
 <div *ngIf="!id">
   <div class="container">
+    <h1>Lehrerübersicht</h1>
     <div class="row row-spacing">
       <button class="btn btn-success" (click)="add(addTeacher)">
-        <b>+</b>
+        <i class="fa fa-user-plus" aria-hidden="true"></i>
       </button>
     </div>
     <div class="row">
@@ -11,14 +12,19 @@
           <th>Vorname</th>
           <th>Nachname</th>
           <th>E-Email</th>
+          <th></th>
         </tr>
         <tr class="clickable" *ngFor="let teacher of dataService.getTeachers()" routerLink="/teacher/{{teacher.id}}">
           <td>{{teacher.firstName}}</td>
           <td>{{teacher.lastName}}</td>
           <td><a href="mailto:{{teacher.mail}}">{{teacher.mail}}</a></td>
+          <td>
+            <i class="fa fa-trash" aria-hidden="true" (click)="delete(teacher.id)"></i>
+          </td>
         </tr>
       </table>
     </div>
+    <p>Zum Bearbeiten einfach auf eine Zeile klicken.</p>
   </div>
 
   <ng-template #addTeacher let-c="close" let-d="dismiss">
@@ -30,56 +36,77 @@
     </div>
 
     <div class="modal-body">
-      <form class="form-horizontal" (ngSubmit)="onSubmit()" #addTeacherForm="ngForm">
-        <div class="form-group row">
-          <label class="control-label col-sm-2" for="firstName">Vorname:</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" id="firstName" required [(ngModel)]="model.firstName" name="firstName">
-          </div>
-        </div>
+      <form class="form-horizontal" (ngSubmit)="update()" #addTeacherForm="ngForm">
 
-        <div class="form-group row">
-          <label class="control-label col-sm-2" for="lastName">Nachname:</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" id="lastName" required [(ngModel)]="model.lastName" name="lastName">
-          </div>
-        </div>
+        <div class="form-group" *ngIf="true; then teacherFormTmpl"></div> <!-- only way to insert html "variables" -->
 
-        <div class="form-group row">
-          <label class="control-label col-sm-2" for="email">E-Mail:</label>
-          <div class="col-sm-10">
-            <input type="email" class="form-control" id="email" required [(ngModel)]="model.email" name="email">
-          </div>
-        </div>
-
-        <div class="form-group row">
-          <label class="control-label col-sm-2" for="pass">Passwort:</label>
-          <div class="col-sm-10">
-            <input type="password" class="form-control" id="pass" required [(ngModel)]="model.pass" name="pass">
-          </div>
-        </div>
-
-        <!--div class="form-group">
-          <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="btn btn-default" [disabled]="!addTeacherForm.form.valid">Anmelden</button>
-          </div>
-        </div-->
       </form>
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-outline-dark" (click)="c(undefined)">Abbrechen</button>
-      <button type="button" class="btn btn-primary" (click)="c(addTeacherForm.form.value)" [disabled]="!addTeacherForm.form.valid">Speichern</button>
+      <button type="submit" class="btn btn-primary" (click)="c(true)" [disabled]="formInvalid()">Speichern</button>
     </div>
   </ng-template>
-
 </div>
-
 
 
 <div *ngIf="id">
-  Detailansicht
+  <div class="container">
+    <h1>Lehrer bearbeiten</h1>
+    <form class="form-horizontal" (ngSubmit)="update(id)" #addTeacherForm="ngForm">
+
+      <div *ngIf="true; then teacherFormTmpl"></div> <!-- only way to insert html "variables" -->
+
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button class="btn btn-secondary" routerLink="/teacher">Abbrechen</button>
+          <button type="submit" class="btn btn-primary" [disabled]="formInvalid()">Ändern</button>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>
 
-<button class="btn btn-secondary" (click)="log()">Test</button>
 
+<ng-template #deleteQuestion let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Wirklich löschen?</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="c(false)">Abbrechen</button>
+    <button type="button" class="btn btn-danger" (click)="c(true)">Löschen</button>
+  </div>
+</ng-template>
 
+<ng-template #teacherFormTmpl>
+  <div class="form-group row">
+    <label class="control-label col-sm-2" for="firstName">Vorname:</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="firstName" required [(ngModel)]="model.firstName" name="firstName">
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label class="control-label col-sm-2" for="lastName">Nachname:</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="lastName" required [(ngModel)]="model.lastName" name="lastName">
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label class="control-label col-sm-2" for="email">E-Mail:</label>
+    <div class="col-sm-10">
+      <input type="email" class="form-control" id="email" required [(ngModel)]="model.mail" name="email">
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label class="control-label col-sm-2" for="pass">Passwort:</label>
+    <div class="col-sm-10">
+      <input type="password" class="form-control" id="pass" required [(ngModel)]="model.pass" name="pass">
+    </div>
+  </div>
+</ng-template>
