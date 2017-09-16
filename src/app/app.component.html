@@ -5,7 +5,7 @@
 
     <div *ngIf="dataService.getLoggedInUser()!==undefined" class="navbar-right">
       <div class="navbar-text">
-        Angemeldet als {{dataService.getTeacher(dataService.getLoggedInUser()).firstName}}, {{dataService.getTeacher(dataService.getLoggedInUser()).lastName}}</div>
+        Angemeldet als {{dataService.getTeacher(dataService.getLoggedInUser()).firstName}} {{dataService.getTeacher(dataService.getLoggedInUser()).lastName}}</div>
       <a href="#" class="btn btn-outline-danger">Logout</a>
     </div>
 
