@@ -1,24 +1,85 @@
-<p>
-  teacher works!
-</p>
-<button (click)="log()">ID?</button>
 <div *ngIf="!id">
   <div class="container">
-    <table class="table table-hover">
-      <tr>
-        <th>Vorname</th>
-        <th>Nachname</th>
-        <th>E-Email</th>
-      </tr>
-      <tr class="clickable" *ngFor="let teacher of dataService.getTeachers()" routerLink="/teacher/{{teacher.id}}">
-        <td>{{teacher.firstName}}</td>
-        <td>{{teacher.lastName}}</td>
-        <td><a href="mailto:{{teacher.mail}}">{{teacher.mail}}</a></td>
-      </tr>
-    </table>
+    <div class="row row-spacing">
+      <button class="btn btn-success" (click)="add(addTeacher)">
+        <b>+</b>
+      </button>
+    </div>
+    <div class="row">
+      <table class="table table-hover">
+        <tr>
+          <th>Vorname</th>
+          <th>Nachname</th>
+          <th>E-Email</th>
+        </tr>
+        <tr class="clickable" *ngFor="let teacher of dataService.getTeachers()" routerLink="/teacher/{{teacher.id}}">
+          <td>{{teacher.firstName}}</td>
+          <td>{{teacher.lastName}}</td>
+          <td><a href="mailto:{{teacher.mail}}">{{teacher.mail}}</a></td>
+        </tr>
+      </table>
+    </div>
   </div>
+
+  <ng-template #addTeacher let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title">Lehrer hinzufügen</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <form class="form-horizontal" (ngSubmit)="onSubmit()" #addTeacherForm="ngForm">
+        <div class="form-group row">
+          <label class="control-label col-sm-2" for="firstName">Vorname:</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="firstName" required [(ngModel)]="model.firstName" name="firstName">
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="control-label col-sm-2" for="lastName">Nachname:</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="lastName" required [(ngModel)]="model.lastName" name="lastName">
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="control-label col-sm-2" for="email">E-Mail:</label>
+          <div class="col-sm-10">
+            <input type="email" class="form-control" id="email" required [(ngModel)]="model.email" name="email">
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="control-label col-sm-2" for="pass">Passwort:</label>
+          <div class="col-sm-10">
+            <input type="password" class="form-control" id="pass" required [(ngModel)]="model.pass" name="pass">
+          </div>
+        </div>
+
+        <!--div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default" [disabled]="!addTeacherForm.form.valid">Anmelden</button>
+          </div>
+        </div-->
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="c(undefined)">Abbrechen</button>
+      <button type="button" class="btn btn-primary" (click)="c(addTeacherForm.form.value)" [disabled]="!addTeacherForm.form.valid">Speichern</button>
+    </div>
+  </ng-template>
+
 </div>
+
+
+
 <div *ngIf="id">
   Detailansicht
 </div>
+
+<button class="btn btn-secondary" (click)="log()">Test</button>
+
 
