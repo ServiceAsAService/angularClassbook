@@ -1,6 +1,7 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {DataService} from "../data.service";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-teacher',
@@ -13,18 +14,27 @@ export class TeacherComponent implements OnInit, OnDestroy {
   id: string;
   private sub: any;
 
-  constructor(private route: ActivatedRoute, private dataService: DataService) { }
+  model = {firstName: "", lastName: "", email: "", pass: ""};
+
+  constructor(private route: ActivatedRoute, private dataService: DataService, private modalService: NgbModal) { }
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
-      this.id = params['id']; //
-
-      // In a real app: dispatch action to load the details here.
+      this.id = params['id']; //get ID from route parameter
     });
   }
 
-  log() {
-    console.log(this.id);
+  log(l) {
+    console.log(l);
+  }
+
+  add(content) {
+    this.modalService.open(content).result.then((res) => {
+      console.log(`closed with`, res);
+      if(res) {
+        this.dataService.addTeacher(res.firstName, res.lastName, res.email, res.pass);
+      }
+    }, (reason) => {/*dismissed*/});
   }
 
   ngOnDestroy() {
