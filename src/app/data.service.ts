@@ -75,10 +75,26 @@ export class DataService {
     this.saveLocalstorage('teachers', t);
   }
 
+  updateTeacherObj(obj) {
+    this.updateTeacher(obj.id, obj.firstName, obj.lastName, obj.mail, obj.pass);
+  }
+
   removeTeacher(id) {
     let teachers = this.getTeachers();
     teachers = teachers.filter(e => e.id !== id);
     this.saveLocalstorage('teachers', teachers);
+  }
+
+  getTeacherPassword(id) {
+    let t = this.getTeacher(id);
+    return t.password;
+  }
+
+  setTeacherPassword(id, pass) {
+    let t = this.getTeacher(id);
+    if(!t) return false;
+    t.pass = pass;
+    this.updateTeacherObj(t);
   }
 
 
@@ -104,7 +120,6 @@ export class DataService {
     let classes = this.getClasses();
     let id = Math.max.apply(this, classes.map(e => e.id)) + 1; //generate new id
     if(id < 0) id = 0; //set id to zero, if no previous id was found
-    console.log(id);
     let c = {id: id, name: name, grade: grade};
     classes.push(c);
     this.saveLocalstorage('classes', classes);
