@@ -26,6 +26,15 @@ export class DataService {
     ]);
   }
 
+  getLoggedInUser() {
+    let teacherId = this.getLocalstorage('loggedInUser');
+    return teacherId;
+  }
+
+  setLoggedInUser(teacherId) {
+    this.saveLocalstorage('loggedInUser', teacherId);
+  }
+
   getTeachers() {
     let ret = this.getLocalstorage('teachers');
     if (!ret) { //no data found in localstorage
