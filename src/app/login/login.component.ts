@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {LoginService} from "../login.service";
+import {DataService} from "../data.service";
 
 @Component({
   selector: 'app-login',
@@ -14,15 +15,16 @@ export class LoginComponent implements OnInit {
 
   model = {user: "", pass: ""};
 
-  constructor(private router: Router, private loginService: LoginService) {
+  constructor(private router: Router, private loginService: LoginService, private dataService: DataService) {
   }
 
   ngOnInit() {
   }
 
   onSubmit() {
-    if(this.loginService.authenticate(this.model.user, this.model.pass)) {
+    if (this.loginService.authenticate(this.model.user, this.model.pass)) {
       this.wrongCredentials = false;
+      this.dataService.setLoggedInUser(0); //todo replace with real logged in user
       this.router.navigate(['/dashboard']);
     }
     else

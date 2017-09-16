@@ -14,7 +14,7 @@ export class DataService {
 
   getLocalstorage(key) {
     let data = localStorage['classBook.' + key];
-    if(data) return JSON.parse(data);
+    if (data) return JSON.parse(data);
     else return undefined;
   }
 
@@ -47,7 +47,7 @@ export class DataService {
 
   getTeacher(id) {
     let teachers = this.getTeachers();
-    return teachers.filter(e => e.id === id)[0];
+    return teachers.filter(e => e.id == id)[0];
   }
 
   addTeacher(fName, lName, mail, pass) {
@@ -57,6 +57,12 @@ export class DataService {
     let t = {id: id, firstName: fName, lastName: lName, mail: mail, pass: pass};
     teachers.push(t);
     this.saveLocalstorage('teachers', teachers);
+  }
+
+  updateTeacher(id, fName, lName, mail, pass) {
+    let t = this.getTeachers();
+    t[id] = {id: id, firstName: fName, lastName: lName, mail: mail, pass: pass};
+    this.saveLocalstorage('teachers', t);
   }
 
   removeTeacher(id) {
