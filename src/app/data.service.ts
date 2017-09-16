@@ -13,7 +13,9 @@ export class DataService {
   }
 
   getRaw(key) {
-    return JSON.parse(localStorage['classBook.' + key]);
+    let data = localStorage['classBook.' + key];
+    if(data) return JSON.parse(data);
+    else return undefined;
   }
 
   generateInitialData() {
