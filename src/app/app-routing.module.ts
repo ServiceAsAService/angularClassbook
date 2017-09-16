@@ -5,21 +5,20 @@ import { ClassComponent } from './class/class.component';
 import { PupilComponent } from './pupil/pupil.component';
 import { NotesComponent } from './notes/notes.component';
 import { LoginComponent } from './login/login.component';
-import {DashboardComponent} from "./dashboard/dashboard.component";
-import {LogoutComponent} from "./logout/logout.component";
+import { DashboardComponent } from "./dashboard/dashboard.component";
+import { LogoutComponent } from "./logout/logout.component";
+import { LoginService } from "./login.service";
 
 const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
-    { path: 'login',       component: LoginComponent },
-    { path: 'logout',      component: LogoutComponent },
-    { path: 'class',       component: ClassComponent },
-    { path: 'class/:id',   component: ClassComponent },
-    { path: 'teacher',     component: TeacherComponent },
-    { path: 'teacher/:id', component: TeacherComponent },
-    { path: 'pupil',       component: PupilComponent },
-    { path: 'pupil/:id',   component: PupilComponent },
-    { path: 'notes',       component: NotesComponent },
-    { path: 'dashboard',   component: DashboardComponent}
+    { path: 'login',       component: LoginComponent    },
+    { path: 'logout',      component: LogoutComponent,    canActivate: [LoginService] },
+    { path: 'class',       component: ClassComponent,     canActivate: [LoginService] },
+    { path: 'teacher',     component: TeacherComponent,   canActivate: [LoginService] },
+    { path: 'teacher/:id', component: TeacherComponent,   canActivate: [LoginService] },
+    { path: 'pupil',       component: PupilComponent,     canActivate: [LoginService] },
+    { path: 'notes',       component: NotesComponent,     canActivate: [LoginService] },
+    { path: 'dashboard',   component: DashboardComponent, canActivate: [LoginService] }
 ];
 
 @NgModule({
