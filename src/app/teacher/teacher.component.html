@@ -3,7 +3,7 @@
     <h1>Lehrerübersicht</h1>
     <div class="row row-spacing">
       <button class="btn btn-success" (click)="add(addTeacher)">
-        <b>+</b>
+        <i class="fa fa-user-plus" aria-hidden="true"></i>
       </button>
     </div>
     <div class="row">
@@ -12,14 +12,19 @@
           <th>Vorname</th>
           <th>Nachname</th>
           <th>E-Email</th>
+          <th></th>
         </tr>
         <tr class="clickable" *ngFor="let teacher of dataService.getTeachers()" routerLink="/teacher/{{teacher.id}}">
           <td>{{teacher.firstName}}</td>
           <td>{{teacher.lastName}}</td>
           <td><a href="mailto:{{teacher.mail}}">{{teacher.mail}}</a></td>
+          <td>
+            <i class="fa fa-trash" aria-hidden="true" (click)="delete(teacher.id)"></i>
+          </td>
         </tr>
       </table>
     </div>
+    <p>Zum Bearbeiten einfach auf eine Zeile klicken.</p>
   </div>
 
   <ng-template #addTeacher let-c="close" let-d="dismiss">
@@ -42,7 +47,6 @@
       <button type="submit" class="btn btn-primary" (click)="c(true)" [disabled]="formInvalid()">Speichern</button>
     </div>
   </ng-template>
-
 </div>
 
 
@@ -63,8 +67,19 @@
   </div>
 </div>
 
-<button class="btn btn-secondary" (click)="test()">Test</button>
 
+<ng-template #deleteQuestion let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Wirklich löschen?</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="c(false)">Abbrechen</button>
+    <button type="button" class="btn btn-danger" (click)="c(true)">Löschen</button>
+  </div>
+</ng-template>
 
 <ng-template #teacherFormTmpl>
   <div class="form-group row">

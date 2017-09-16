@@ -1,4 +1,4 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Component, OnInit, OnDestroy, ViewChild, TemplateRef} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {DataService} from "../data.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
@@ -31,16 +31,16 @@ export class TeacherComponent implements OnInit, OnDestroy {
     });
   }
 
-  log(l) {
-    console.log(l);
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 
   formInvalid() {
     return !(this.model.firstName && this.model.lastName && this.model.mail && this.model.pass);
   }
 
-  add(content) {
-    this.modalService.open(content).result.then((res) => {
+  add(template) {
+    this.modalService.open(template).result.then((res) => {
       if (res) { //if modal got closed with data
         this.dataService.addTeacher(this.model.firstName, this.model.lastName, this.model.mail, this.model.pass);
       }
@@ -54,12 +54,15 @@ export class TeacherComponent implements OnInit, OnDestroy {
     this.router.navigate(['/teacher']);
   }
 
-  test() {
-    //this.dataService.setLoggedInUser(5);
-  }
+  @ViewChild('deleteQuestion') deleteQuestion; //get template from HTML
+  delete(id) {
+    this.modalService.open(this.deleteQuestion).result.then((reallyDelete) => {
+        if (reallyDelete)
+          this.dataService.removeTeacher(id);
+      },
+      (reason) => { //dismissed
+      })
 
-  ngOnDestroy() {
-    this.sub.unsubscribe();
   }
 
 }
