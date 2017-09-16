@@ -5,19 +5,21 @@ import { ClassComponent } from './class/class.component';
 import { PupilComponent } from './pupil/pupil.component';
 import { NotesComponent } from './notes/notes.component';
 import { LoginComponent } from './login/login.component';
-import {DashboardComponent} from "./dashboard/dashboard.component";
-import {LogoutComponent} from "./logout/logout.component";
+import { DashboardComponent } from "./dashboard/dashboard.component";
+import { LogoutComponent } from "./logout/logout.component";
+import { LoginService } from "./login.service";
+import { Injectable } from '@angular/core';
 
 const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
-    { path: 'login',       component: LoginComponent },
-    { path: 'logout',      component: LogoutComponent },
-    { path: 'class',       component: ClassComponent },
-    { path: 'teacher',     component: TeacherComponent },
-    { path: 'teacher/:id', component: TeacherComponent },
-    { path: 'pupil',       component: PupilComponent },
-    { path: 'notes',       component: NotesComponent },
-    { path: 'dashboard',   component: DashboardComponent}
+    { path: 'login', component: LoginComponent },
+    { path: 'logout', canActivate: [LoginService], component: LogoutComponent },
+    { path: 'class', canActivate: [LoginService], component: ClassComponent },
+    { path: 'teacher', canActivate: [LoginService], component: TeacherComponent },
+    { path: 'teacher/:id', canActivate: [LoginService], component: TeacherComponent },
+    { path: 'pupil', canActivate: [LoginService], component: PupilComponent },
+    { path: 'notes', canActivate: [LoginService], component: NotesComponent },
+    { path: 'dashboard', canActivate: [LoginService], component: DashboardComponent }
 ];
 
 @NgModule({
@@ -27,6 +29,11 @@ const routes: Routes = [
     exports: [
         RouterModule
     ],
-    declarations: []
+    declarations: [],
+    providers: [
+        LoginService
+    ]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+
+}
