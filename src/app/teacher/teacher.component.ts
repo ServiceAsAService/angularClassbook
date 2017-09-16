@@ -49,7 +49,6 @@ export class TeacherComponent implements OnInit, OnDestroy {
   }
 
   update(id) {
-    console.log(this.model);
     this.dataService.updateTeacher(id, this.model.firstName, this.model.lastName, this.model.mail, this.model.pass);
     this.router.navigate(['/teacher']);
   }
@@ -62,7 +61,6 @@ export class TeacherComponent implements OnInit, OnDestroy {
       },
       (reason) => { //dismissed
       })
-
   }
 
 }

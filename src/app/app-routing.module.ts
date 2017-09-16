@@ -13,9 +13,11 @@ const routes: Routes = [
     { path: 'login',       component: LoginComponent },
     { path: 'logout',      component: LogoutComponent },
     { path: 'class',       component: ClassComponent },
+    { path: 'class/:id',   component: ClassComponent },
     { path: 'teacher',     component: TeacherComponent },
     { path: 'teacher/:id', component: TeacherComponent },
     { path: 'pupil',       component: PupilComponent },
+    { path: 'pupil/:id',   component: PupilComponent },
     { path: 'notes',       component: NotesComponent },
     { path: 'dashboard',   component: DashboardComponent}
 ];

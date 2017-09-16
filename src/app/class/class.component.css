@@ -1,0 +1,7 @@
+.clickable td {
+  cursor: pointer;
+}
+
+.row-spacing {
+  margin-bottom: 1em;
+}
