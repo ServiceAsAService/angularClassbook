@@ -6,20 +6,20 @@ export class DataService {
   constructor() {
   }
 
-  saveRaw(key, data) {
+  saveLocalstorage(key, data) {
     if (!localStorage.classBook)
       localStorage.classBook = {};
     localStorage['classBook.' + key] = JSON.stringify(data);
   }
 
-  getRaw(key) {
+  getLocalstorage(key) {
     let data = localStorage['classBook.' + key];
     if(data) return JSON.parse(data);
     else return undefined;
   }
 
   generateInitialData() {
-    this.saveRaw('teachers', [
+    this.saveLocalstorage('teachers', [
       {id: 0, firstName: 'Lehrer', lastName: '1', mail: 'lehrer.1@schule.de', pass: 'passwort'},
       {id: 1, firstName: 'Lehrer', lastName: '2', mail: 'lehrer.2@schule.de', pass: 'passwort'},
       {id: 2, firstName: 'Lehrer', lastName: '3', mail: 'lehrer.3@schule.de', pass: 'passwort'},
@@ -27,9 +27,11 @@ export class DataService {
   }
 
   getTeachers() {
-    let ret = this.getRaw('teachers');
-    if (!ret)
+    let ret = this.getLocalstorage('teachers');
+    if (!ret) { //no data found in localstorage
+      this.generateInitialData();
       return [];
+    }
     else
       return ret;
   }
@@ -45,12 +47,12 @@ export class DataService {
     id = id || 0;
     let t = {id: id, firstName: fName, lastName: lName, mail: mail, pass: pass};
     teachers.push(t);
-    this.saveRaw('teachers', teachers);
+    this.saveLocalstorage('teachers', teachers);
   }
 
   removeTeacher(id) {
     let teachers = this.getTeachers();
     teachers = teachers.filter(e => e.id !== id);
-    this.saveRaw('teachers', teachers);
+    this.saveLocalstorage('teachers', teachers);
   }
 }
