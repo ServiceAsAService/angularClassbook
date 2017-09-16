@@ -1,3 +1,107 @@
-<p>
-  pupil works!
-</p>
+<div *ngIf="!id">
+  <div class="container">
+    <h1>Schülerübersicht</h1>
+    <div class="row row-spacing">
+      <button class="btn btn-success" (click)="add()">
+        <i class="fa fa-plus" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div class="row">
+      <table class="table table-hover">
+        <tr>
+          <th>Vorname</th>
+          <th>Nachname</th>
+          <th>Klasse</th>
+          <th></th>
+        </tr>
+        <tr class="clickable" *ngFor="let pupil of dataService.getPupils()" routerLink="/pupil/{{pupil.id}}">
+          <td>{{pupil.firstName}}</td>
+          <td>{{pupil.lastName}}</td>
+          <td>{{dataService.getPupilClass(pupil.id).name}}</td>
+          <td>
+            <i class="fa fa-trash" aria-hidden="true" (click)="delete(pupil.id)"></i>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <p>Zum Bearbeiten einfach auf eine Zeile klicken.</p>
+  </div>
+
+  <ng-template #addPupil let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title">Schüler hinzufügen</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <form class="form-horizontal" (ngSubmit)="update()" #addPupilForm="ngForm">
+
+        <div class="form-group" *ngIf="true; then pupilFormTmpl"></div> <!-- only way to insert html "variables" -->
+
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="c(false)">Abbrechen</button>
+      <button type="submit" class="btn btn-primary" (click)="c(true)" [disabled]="formInvalid()">Speichern</button>
+    </div>
+  </ng-template>
+</div>
+
+
+<div *ngIf="id">
+  <div class="container">
+    <h1>Schüler bearbeiten</h1>
+    <form class="form-horizontal" (ngSubmit)="update(id)" #modifyPupilForm="ngForm">
+
+      <div *ngIf="true; then pupilFormTmpl"></div> <!-- only way to insert html "variables" -->
+
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button class="btn btn-secondary" routerLink="/pupil">Abbrechen</button>
+          <button type="submit" class="btn btn-primary" [disabled]="formInvalid()">Ändern</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<ng-template #deleteQuestion let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Wirklich löschen?</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="c(false)">Abbrechen</button>
+    <button type="button" class="btn btn-danger" (click)="c(true)">Löschen</button>
+  </div>
+</ng-template>
+
+<ng-template #pupilFormTmpl>
+  <div class="form-group row">
+    <label class="control-label col-sm-4" for="firstName">Vorname:</label>
+    <div class="col-sm-8">
+      <input type="text" class="form-control" id="firstName" required [(ngModel)]="model.firstName" name="firstName">
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label class="control-label col-sm-4" for="lastName">Nachname:</label>
+    <div class="col-sm-8">
+      <input type="text" class="form-control" id="lastName" required [(ngModel)]="model.lastName" name="lastName">
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label class="control-label col-sm-4" for="class">Klasse:</label>
+    <div class="col-sm-8">
+      <select class="form-control" id="class" [(ngModel)]="model.classId" required>
+        <option *ngFor="let class of dataService.getClasses()" [value]="class.id">{{class.name}}</option>
+      </select>
+    </div>
+  </div>
+</ng-template>

@@ -29,6 +29,13 @@ export class DataService {
       {id: 1, name: '5b', grade: 5},
       {id: 2, name: '6a', grade: 6},
       {id: 3, name: '7a', grade: 7},
+    ]);
+    this.saveLocalstorage('pupils', [
+      {id: 0, firstName: 'Schüler', lastName: '1', classId: 0},
+      {id: 1, firstName: 'Schüler', lastName: '2', classId: 0},
+      {id: 2, firstName: 'Schüler', lastName: '3', classId: 1},
+      {id: 3, firstName: 'Schüler', lastName: '4', classId: 2},
+      {id: 4, firstName: 'Schüler', lastName: '5', classId: 3},
     ])
   }
 
@@ -135,5 +142,50 @@ export class DataService {
     let c = this.getClasses();
     c = c.filter(e => e.id !== id);
     this.saveLocalstorage('classes', c);
+  }
+
+
+  /******************** Pupil **********************/
+
+  getPupils() {
+    let ret = this.getLocalstorage('pupils');
+    if (!ret) { //no data found in localstorage
+      this.generateInitialData();
+      return this.getPupils();
+    }
+    else
+      return ret;
+  }
+
+  getPupil(id) {
+    let pupils = this.getPupils();
+    return pupils.filter(e => e.id == id)[0];
+  }
+
+  addPupil(firstName, lastName, classId) {
+    let pupils = this.getPupils();
+    let id = Math.max.apply(this, pupils.map(e => e.id)) + 1; //generate new id
+    if(id < 0) id = 0; //set id to zero, if no previous id was found
+    let p = {id: id, firstName: firstName, lastName: lastName, classId: classId};
+    pupils.push(p);
+    this.saveLocalstorage('pupils', pupils);
+  }
+
+  updatePupil(id, firstName, lastName, classId) {
+    let p = this.getPupils();
+    p[id] = {id: id, firstName: firstName, lastName: lastName, classId: classId};
+    this.saveLocalstorage('pupils', p);
+  }
+
+  removePupil(id) {
+    let p = this.getPupils();
+    p = p.filter(e => e.id !== id);
+    this.saveLocalstorage('pupils', p);
+  }
+
+  getPupilClass(pId) {
+    let p = this.getPupil(pId);
+    let c = this.getClass(p.classId);
+    return c;
   }
 }

@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild, OnDestroy} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {DataService} from "../data.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
@@ -8,12 +8,12 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
   templateUrl: './class.component.html',
   styleUrls: ['./class.component.css']
 })
-export class ClassComponent implements OnInit {
+export class ClassComponent implements OnInit, OnDestroy {
 
   private id: string;
   private sub: any;
 
-  model = {name: "", grade: "", classTeacher: ""};
+  model = {name: "", grade: 0, classTeacher: ""};
 
   constructor(private route: ActivatedRoute,
               private dataService: DataService,
@@ -62,5 +62,4 @@ export class ClassComponent implements OnInit {
       (reason) => { //dismissed
       })
   }
-
 }
