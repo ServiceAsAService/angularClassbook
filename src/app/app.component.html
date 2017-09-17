@@ -1,15 +1,17 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<nav class="navbar navbar-dark bg-dark">
-  <div class="container-fluid">
-    <a class="navbar-brand" routerLink="{{logoutVisible() ? '/dashboard' : '/'}}">Klassenbuch</a>
-
-    <div *ngIf="dataService.getLoggedInUser() !== undefined" class="navbar-right">
-      <div class="navbar-text">
-        Angemeldet als {{dataService.getTeacher(dataService.getLoggedInUser()).firstName}} {{dataService.getTeacher(dataService.getLoggedInUser()).lastName}}
-      </div>
-      <a (click)="logout()" class="btn btn-outline-danger">Logout</a>
+<nav class="navbar sticky-top navbar-dark bg-dark container-fluid">
+  <span class="navbar-left">
+    <a class=" navbar-brand" routerLink="{{logoutVisible() ? '/dashboard' : '/'}}">Klassenbuch</a>
+    <span *ngIf="dataService.getLoggedInUser() !== undefined">
+      <a class="navbar-brand" routerLink="{{'/teacher'}}">Lehrer</a>
+      <a class="navbar-brand " routerLink="{{'/pupil'}}">Schüler</a>
+      <a class="navbar-brand" routerLink="{{'/notes'}}">Notizen</a>
+    </span>
+  </span>
+  <div *ngIf="dataService.getLoggedInUser() !== undefined" class="navbar-right">
+    <div class="navbar-text text-center">
+      Angemeldet als {{dataService.getTeacher(dataService.getLoggedInUser()).firstName}} {{dataService.getTeacher(dataService.getLoggedInUser()).lastName}}
     </div>
-
+    <a (click)="logout()" class="btn btn-outline-danger text-white">Logout</a>
   </div>
 
 </nav>
