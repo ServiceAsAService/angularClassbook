@@ -13,9 +13,9 @@ import { NotesComponent } from './notes/notes.component';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LogoutComponent } from './logout/logout.component';
-
 import { LoginService } from './login.service';
 import { DataService } from './data.service';
+import { LandingPageComponent } from './landing-page/landing-page.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +26,8 @@ import { DataService } from './data.service';
     NotesComponent,
     LoginComponent,
     DashboardComponent,
-    LogoutComponent
+    LogoutComponent,
+    LandingPageComponent
   ],
   imports: [
     BrowserModule,
@@ -34,7 +35,7 @@ import { DataService } from './data.service';
     NgbModule.forRoot(),
     FormsModule
   ],
-  providers: [LoginService,DataService],
+  providers: [LoginService, DataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

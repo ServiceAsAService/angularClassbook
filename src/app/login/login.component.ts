@@ -27,6 +27,11 @@ export class LoginComponent implements OnInit {
       this.loginService.authentificate(this.model.user, this.model.pass)
         .then(() => {
           console.log("authentificated");
+          if (this.model.user == "Wurzelbenutzer") {
+            this.router.navigate(['/landing-page']);
+            console.log("wurzelchen");
+            return;
+          }
           this.wrongCredentials = false;
           this.router.navigate(['/dashboard']);
         }).catch((err) => {

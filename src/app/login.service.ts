@@ -9,20 +9,19 @@ export class LoginService implements CanActivate {
 
     constructor(private router: Router, private dataService: DataService) {
         console.log(dataService);
-
     }
     public logOut() {
         this.dataService.setLoggedInUser(undefined);
     }
     public authentificate(email: string, password: string) {
-        console.log("auth");
         return new Promise((resolve, reject) => {
             if (email === "Wurzelbenutzer" && password === "Wurzelbenutzer") {
                 this.dataService.setLoggedInUser(0);
                 resolve();
+                return;
             }
             let teacher = this.dataService.getTeacherByMail(email);
-            console.log(teacher);
+            console.log(teacher, email);
             bcrypt.compare(password, teacher.pass)
                 .then((result) => {
                     if (result) {
@@ -60,6 +59,9 @@ export class LoginService implements CanActivate {
     }
 
     public isLoggedIn() {
+        if (this.dataService.getTeachers() == []) {
+            return false;
+        }
         return this.dataService.getLoggedInUser() !== undefined;
     }
 
