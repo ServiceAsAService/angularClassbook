@@ -188,4 +188,75 @@ export class DataService {
     let c = this.getClass(p.classId);
     return c;
   }
+
+
+
+  /******************** Notes **********************/
+  notes = [];
+  getNotes() {
+    let ret = this.getLocalstorage('notes');
+    if (!ret) { //no data found in localstorage
+      return [];
+    }
+    else {
+      ret = ret.map(elem => {
+        elem.date = new Date(elem.date); //convert date string back to date
+        return elem;
+      });
+      if(JSON.stringify(this.notes) !== JSON.stringify(ret))
+        this.notes = ret;
+      return this.notes;
+    }
+
+  }
+
+  getNote(id) {
+    let notes = this.getNotes();
+    return notes.filter(e => e.id == id)[0];
+  }
+
+  getNotesOfPupil(pId) {
+    let notes = this.getNotes();
+    return notes.filter(e => e.pupilId == pId);
+  }
+
+  getNoteCount(pId) {
+    let n = this.getNotesOfPupil(pId);
+    let c = 0;
+    if(n) c = n.length; //only return length if notes aren't undefined
+    return c;
+  }
+
+  getNotePupilName(id) {
+    let n = this.getNote(id);
+    let p = this.getPupil(n.pupilId);
+    return p.firstName + " " + p.lastName;
+  }
+
+  getNoteTeacherName(id) {
+    let n = this.getNote(id);
+    let p = this.getTeacher(n.teacherId);
+    return p.firstName + " " + p.lastName;
+  }
+
+  addNote(pupilId, teacherId, text, date) {
+    let notes = this.getNotes();
+    let id = Math.max.apply(this, notes.map(e => e.id)) + 1; //generate new id
+    if(id < 0) id = 0; //set id to zero, if no previous id was found
+    let n = {id: id, pupilId: pupilId, teacherId: teacherId, text: text, date: date};
+    notes.push(n);
+    this.saveLocalstorage('notes', notes);
+  }
+
+  updateNote(id, pupilId, teacherId, text, date) {
+    let n = this.getNotes();
+    n[id] = {id: id, pupilId: pupilId, teacherId: teacherId, text: text, date: date};
+    this.saveLocalstorage('notes', n);
+  }
+
+  removeNote(id) {
+    let n = this.getNotes();
+    n = n.filter(e => e.id !== id);
+    this.saveLocalstorage('notes', n);
+  }
 }

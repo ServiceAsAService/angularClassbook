@@ -1,3 +1,134 @@
-<p>
-  notes works!
-</p>
+<div *ngIf="!id">
+  <div class="container">
+    <h1>Einträgeübersicht</h1>
+    <div class="row row-spacing">
+      <button class="btn btn-success" (click)="add()">
+        <i class="fa fa-plus" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div class="row">
+      <table class="table table-hover">
+        <tr>
+          <th>Schüler</th>
+          <th>angelegt von</th>
+          <th>Text</th>
+          <th>Datum</th>
+          <th></th>
+        </tr>
+        <tr class="clickable" *ngFor="let note of dataService.getNotes()" routerLink="/notes/{{note.id}}">
+          <td>{{dataService.getNotePupilName(note.id)}}</td>
+          <td>{{dataService.getNoteTeacherName(note.id)}}</td>
+          <td>
+            <span ngbPopover="{{note.text}}" triggers="mouseenter:mouseleave" container="body">
+              {{trimString(note.text, 35, true)}}
+            </span>
+          </td>
+          <td>{{dateToString(note.date)}}</td>
+          <td>
+            <i class="fa fa-trash" aria-hidden="true" (click)="delete(note.id)"></i>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <p>Zum Bearbeiten einfach auf eine Zeile klicken.</p>
+  </div>
+
+  <ng-template #addNote let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title">Eintrag hinzufügen</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <form class="form-horizontal" (ngSubmit)="update()" #addNoteForm="ngForm">
+
+        <div class="form-group" *ngIf="true; then noteFormTmpl"></div> <!-- only way to insert html "variables" -->
+
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="c(false)">Abbrechen</button>
+      <button type="submit" class="btn btn-primary" (click)="c(true)" [disabled]="formInvalid()">Speichern</button>
+    </div>
+  </ng-template>
+</div>
+
+
+<div *ngIf="id">
+  <div class="container">
+    <h1>Eintrag bearbeiten</h1>
+    <form class="form-horizontal" (ngSubmit)="update(id)" #modifyNoteForm="ngForm">
+
+      <div *ngIf="true; then noteFormTmpl"></div> <!-- only way to insert html "variables" -->
+
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button class="btn btn-secondary" (click)="goBack()">Abbrechen</button>
+          <button type="submit" class="btn btn-primary" [disabled]="formInvalid()">Ändern</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<ng-template #deleteQuestion let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Wirklich löschen?</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="c(false)">Abbrechen</button>
+    <button type="button" class="btn btn-danger" (click)="c(true)">Löschen</button>
+  </div>
+</ng-template>
+
+<ng-template #noteFormTmpl>
+  <div class="form-group row">
+    <label class="control-label col-sm-4" for="pupil">Schüler:</label>
+    <div class="col-sm-8">
+      <select class="form-control" id="pupil" [(ngModel)]="model.pupilId" required>
+        <option *ngFor="let pupil of dataService.getPupils()" [value]="pupil.id">{{pupil.firstName}}
+          {{pupil.lastName}}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label class="control-label col-sm-4" for="pupil">Lehrer:</label>
+    <div class="col-sm-8">
+      <select class="form-control" id="teacher" [(ngModel)]="model.teacherId" required>
+        <option *ngFor="let teacher of dataService.getTeachers()" [value]="teacher.id">{{teacher.firstName}}
+          {{teacher.lastName}}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label class="control-label col-sm-4" for="text">Notiz:</label>
+    <div class="col-sm-8">
+      <textarea class="form-control" id="text" [(ngModel)]="model.text" required></textarea>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label class="control-label col-sm-4" for="date">Zeit:</label>
+    <div class="col-sm-8" id="date">
+      <div class="input-group row-spacing">
+        <input class="form-control" placeholder="yyyy-mm-dd"
+               name="dp" [(ngModel)]="model.datePicker" ngbDatepicker #d="ngbDatepicker">
+        <button class="input-group-addon" (click)="d.toggle()" type="button">
+          <!--img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/-->
+          <i class="fa fa-calendar" aria-hidden="true"></i>
+        </button>
+      </div>
+      <ngb-timepicker [(ngModel)]="model.time" [spinners]="false"></ngb-timepicker>
+    </div>
+  </div>
+</ng-template>
