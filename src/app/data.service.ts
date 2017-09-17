@@ -108,13 +108,14 @@ export class DataService {
     return t.firstName + " " + t.lastName;
   }
 
- 
+
   removeTeacher(id) {
     let teachers = this.getTeachers();
-    teachers.find(e => e.id == id).deleted = true;
+    let idx = teachers.findIndex(e => e.id === id);
+    teachers[idx].deleted = true;
     this.saveLocalstorage('teachers', teachers);
   }
-  
+
 
   addTeacher(fName, lName, mail) {
     let teachers = this.getTeachers();
@@ -140,14 +141,16 @@ export class DataService {
   updateTeacher(id, fName, lName, mail) {
     let t = this.getTeachers();
     // password unset due to asynchronous encryption
-    t[id] = {id: +id, firstName: fName, lastName: lName, mail: mail, pass: ''};
+    let idx = t.findIndex(e => e.id === id);
+    t[idx] = {id: +id, firstName: fName, lastName: lName, mail: mail, pass: ''};
     this.saveLocalstorage('teachers', t);
   }
 
   setTeacherPassword(id, pass) {
     let t = this.getTeachers();
-    if (!t[id]) return false;
-    t[id].pass = pass;
+    let idx = t.findIndex(e => e.id === id);
+    if (!t[idx]) return false;
+    t[idx].pass = pass;
     this.saveLocalstorage('teachers', t);
   }
 
@@ -185,15 +188,17 @@ export class DataService {
 
   updateClass(id, name, grade) {
     let c = this.getClasses();
-    c[id] = {id: +id, name: name, grade: grade};
+    let idx = c.findIndex(e => e.id === id);
+    c[idx] = {id: +id, name: name, grade: grade};
     this.saveLocalstorage('classes', c);
   }
   removeClass(id) {
     let c = this.getClasses();
-    c.find(e => e.id === id).deleted = true;
+    let idx = c.findIndex(e => e.id === id);
+    c[idx].deleted = true;
     this.saveLocalstorage('classes', c);
   }
-  
+
 
 
   /******************** Pupil **********************/
@@ -232,13 +237,15 @@ export class DataService {
 
   updatePupil(id, firstName, lastName, classId) {
     let p = this.getPupils();
-    p[id] = {id: +id, firstName: firstName, lastName: lastName, classId: +classId};
+    let idx = p.findIndex(e => e.id === id);
+    p[idx] = {id: +id, firstName: firstName, lastName: lastName, classId: +classId};
     this.saveLocalstorage('pupils', p);
   }
 
   removePupil(id) {
     let p = this.getPupils();
-    p.find(x=>x.id==id).deleted=true;
+    let idx = p.findIndex(e => e.id === id);
+    p[idx].deleted = true;
     this.saveLocalstorage('pupils', p);
   }
 
@@ -275,6 +282,7 @@ export class DataService {
       return this.notes;
     }
   }
+
   getNotesVisible() {
     return this.getNotes().filter(x => !x.deleted);
   }
@@ -285,7 +293,7 @@ export class DataService {
   }
 
   getNotesOfPupil(pId) {
-    let notes = this.getNotes();
+    let notes = this.getNotesVisible();
     return notes.filter(e => e.pupilId == pId);
   }
 
@@ -319,14 +327,16 @@ export class DataService {
 
   updateNote(id, pupilId, teacherId, text, date) {
     let n = this.getNotes();
-    n[id] = {id: +id, pupilId: +pupilId, teacherId: +teacherId, text: text, date: date};
+    let idx = n.findIndex(e => e.id === id);
+    n[idx] = {id: +id, pupilId: +pupilId, teacherId: +teacherId, text: text, date: date};
     this.saveLocalstorage('notes', n);
   }
 
   removeNote(id) {
     let n = this.getNotes();
-    n.find(e => e.id === id).deleted = false;
+    let idx = n.findIndex(e => e.id === id);
+    n[idx].deleted = true;
     this.saveLocalstorage('notes', n);
   }
-  
+
 }

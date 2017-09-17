@@ -83,7 +83,7 @@ export class NotesComponent implements OnInit, OnDestroy {
   }
 
   getNotes() {
-    let n = this.dataService.getNotes();
+    let n = this.dataService.getNotesVisible();
     if (!isNaN(this.pupilId))
       return n.filter(e => e.pupilId == this.pupilId);
     else
