@@ -93,7 +93,7 @@
     <label class="control-label col-sm-4" for="pupil">Schüler:</label>
     <div class="col-sm-8">
       <select class="form-control" id="pupil" [(ngModel)]="model.pupilId" required>
-        <option *ngFor="let pupil of dataService.getPupils()" [value]="pupil.id">{{pupil.firstName}}
+        <option *ngFor="let pupil of dataService.getPupilsVisible()" [value]="pupil.id">{{pupil.firstName}}
           {{pupil.lastName}}
         </option>
       </select>

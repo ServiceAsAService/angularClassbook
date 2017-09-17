@@ -216,6 +216,10 @@ export class DataService {
     }
   }
 
+  getPupilsVisible() {
+    return this.getPupils().filter(x => !x.deleted);
+  }
+
   getPupil(id) {
     let pupils = this.getPupils();
     return pupils.filter(e => e.id == id)[0];

@@ -15,7 +15,7 @@
           <th>Einträge</th>
           <th></th>
         </tr>
-        <tr class="clickable" *ngFor="let pupil of dataService.getPupils()" routerLink="/pupil/{{pupil.id}}">
+        <tr class="clickable" *ngFor="let pupil of dataService.getPupilsVisible()" routerLink="/pupil/{{pupil.id}}">
           <td>{{pupil.firstName}}</td>
           <td>{{pupil.lastName}}</td>
           <td>{{dataService.getPupilClass(pupil.id).name}}</td>
