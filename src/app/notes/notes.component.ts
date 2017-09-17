@@ -47,8 +47,16 @@ export class NotesComponent implements OnInit, OnDestroy {
     return isNaN(this.id);
   }
 
+  pupilView() {
+    return !isNaN(this.pupilId);
+  }
+
   goBack() {
-    this.location.back();
+    if(this.pupilView()) {
+      this.router.navigate(['/notes/pupil', this.pupilId]);
+    }
+    else
+      this.router.navigate(['/notes']);
   }
 
   dateToString(date) {
@@ -74,10 +82,6 @@ export class NotesComponent implements OnInit, OnDestroy {
     return !(m.pupilId >= 0 && m.teacherId >= 0 && m.text && m.date);
   }
 
-  log(l) {
-    console.log(l);
-  }
-
   getNotes() {
     let n = this.dataService.getNotes();
     if (this.pupilId)
@@ -87,7 +91,7 @@ export class NotesComponent implements OnInit, OnDestroy {
   }
 
   convertToModelDate(d) {
-    this.model.datePicker = {year: d.getFullYear(), month: d.getMonth() + 1, day: d.getDay() + 1};
+    this.model.datePicker = {year: d.getFullYear(), month: d.getMonth() + 1, day: d.getDate()};
     this.model.time = {hour: d.getHours(), minute: d.getMinutes()};
   }
 

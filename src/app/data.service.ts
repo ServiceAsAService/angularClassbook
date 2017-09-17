@@ -82,6 +82,8 @@ export class DataService {
   getTeacherList() {
     let t = this.getTeachers();
     t.shift(); //remove root user from List
+    t = t.sort((a, b) => a.firstName.localeCompare(b.firstName));
+    t = t.sort((a, b) => a.lastName.localeCompare(b.lastName));
     return t;
   }
 
@@ -149,8 +151,10 @@ export class DataService {
       this.generateInitialData();
       return this.getClasses();
     }
-    else
+    else {
+      ret.sort((a, b) => a.name.localeCompare(b.name));
       return ret;
+    }
   }
 
   getClass(id) {
@@ -188,8 +192,11 @@ export class DataService {
       this.generateInitialData();
       return this.getPupils();
     }
-    else
+    else {
+      ret.sort((a, b) => a.firstName.localeCompare(b.firstName));
+      ret.sort((a, b) => a.lastName.localeCompare(b.lastName));
       return ret;
+    }
   }
 
   getPupil(id) {
@@ -231,6 +238,12 @@ export class DataService {
 
 
   /******************** Notes **********************/
+  dateSort(a, b) {
+    a = new Date(a.date);
+    b = new Date(b.date);
+    return a > b ? -1 : a < b ? 1 : 0;
+  }
+
   notes = [];
 
   getNotes() {
@@ -244,6 +257,7 @@ export class DataService {
         elem.date = new Date(elem.date); //convert date string back to date
         return elem;
       });
+      ret.sort(this.dateSort);
       if (JSON.stringify(this.notes) !== JSON.stringify(ret))
         this.notes = ret;
       return this.notes;
