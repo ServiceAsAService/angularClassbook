@@ -30,9 +30,9 @@ export class DataService {
         mail: 'Wurzelbenutzer',
         pass: '$2a$10$F3stp/lEsbvQROvdt5pRaOG6tAIAlVOacd1sZi1ONwvi.L6Q7QEfa'
       },
-      {id: 1, firstName: 'Lehrer', lastName: '1', mail: 'lehrer.1@schule.de', pass: 'passwort'},
-      {id: 2, firstName: 'Lehrer', lastName: '2', mail: 'lehrer.2@schule.de', pass: 'passwort'},
-      {id: 3, firstName: 'Lehrer', lastName: '3', mail: 'lehrer.3@schule.de', pass: 'passwort'},
+      {id: 1, firstName: 'Michelle', lastName: 'Kästner', mail: 'm.kaestner@schule.de', pass: '$2a$10$F3stp/lEsbvQROvdt5pRaOG6tAIAlVOacd1sZi1ONwvi.L6Q7QEfa'},
+      {id: 2, firstName: 'Sven', lastName: 'Neudorf', mail: 's.neudorf@schule.de', pass: '$2a$10$F3stp/lEsbvQROvdt5pRaOG6tAIAlVOacd1sZi1ONwvi.L6Q7QEfa'},
+      {id: 3, firstName: 'Leonie', lastName: 'Löwe', mail: 'l.löwe@schule.de', pass: '$2a$10$F3stp/lEsbvQROvdt5pRaOG6tAIAlVOacd1sZi1ONwvi.L6Q7QEfa'},
     ]);
     this.saveLocalstorage('classes', [
       {id: 0, name: '5a', grade: 5},
@@ -41,11 +41,11 @@ export class DataService {
       {id: 3, name: '7a', grade: 7},
     ]);
     this.saveLocalstorage('pupils', [
-      {id: 0, firstName: 'Schüler', lastName: '1', classId: 0},
-      {id: 1, firstName: 'Schüler', lastName: '2', classId: 0},
-      {id: 2, firstName: 'Schüler', lastName: '3', classId: 1},
-      {id: 3, firstName: 'Schüler', lastName: '4', classId: 2},
-      {id: 4, firstName: 'Schüler', lastName: '5', classId: 3},
+      {id: 0, firstName: 'Lisa',   lastName: 'Brauer', classId: 0},
+      {id: 1, firstName: 'Nadine', lastName: 'Schmid', classId: 0},
+      {id: 2, firstName: 'Sophia', lastName: 'Bauer',  classId: 1},
+      {id: 3, firstName: 'David',  lastName: 'Münch',  classId: 2},
+      {id: 4, firstName: 'Jürgen', lastName: 'Baader', classId: 3},
     ]);
     this.saveLocalstorage('notes', [
       {id: 0, pupilId: 0, teacherId: 1, text: "Hat Mitschüler geschlagen.", date: new Date(1505400000000)},
@@ -212,6 +212,7 @@ export class DataService {
     else {
       ret.sort((a, b) => a.firstName.localeCompare(b.firstName));
       ret.sort((a, b) => a.lastName.localeCompare(b.lastName));
+      ret.sort((a, b) => this.getClass(a.classId).name.localeCompare(this.getClass(b.classId).name));
       return ret;
     }
   }
