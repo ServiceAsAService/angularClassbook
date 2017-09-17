@@ -106,7 +106,7 @@
     <label class="control-label col-sm-4" for="class">Klasse:</label>
     <div class="col-sm-8">
       <select class="form-control" id="class" [(ngModel)]="model.classId" required>
-        <option *ngFor="let class of dataService.getClasses()" [value]="class.id">{{class.name}}</option>
+        <option *ngFor="let class of dataService.getClassesVisible()" [value]="class.id">{{class.name}}</option>
       </select>
     </div>
   </div>

@@ -1,8 +1,8 @@
-import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
-import {DataService} from "../data.service";
-import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {Location} from "@angular/common";
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from "@angular/router";
+import { DataService } from "../data.service";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { Location } from "@angular/common";
 
 @Component({
   selector: 'app-notes',
@@ -17,13 +17,13 @@ export class NotesComponent implements OnInit, OnDestroy {
   notes: any;
   interval: any;
 
-  model: any = {pupilId: -1, teacherId: -1, text: "", date: new Date()};
+  model: any = { pupilId: -1, teacherId: -1, text: "", date: new Date() };
 
   constructor(private route: ActivatedRoute,
-              private dataService: DataService,
-              private modalService: NgbModal,
-              private router: Router,
-              private location: Location) {
+    private dataService: DataService,
+    private modalService: NgbModal,
+    private router: Router,
+    private location: Location) {
   }
 
   ngOnInit() {
@@ -31,7 +31,7 @@ export class NotesComponent implements OnInit, OnDestroy {
       this.id = +params['id']; //get ID from route parameter
       if (!this.overview()) {
         this.model = this.dataService.getNote(this.id);
-        if(this.model)
+        if (this.model)
           this.convertToModelDate(this.model.date);
       }
       this.pupilId = +params['pId'];
@@ -52,7 +52,7 @@ export class NotesComponent implements OnInit, OnDestroy {
   }
 
   goBack() {
-    if(this.pupilView()) {
+    if (this.pupilView()) {
       this.router.navigate(['/notes/pupil', this.pupilId]);
     }
     else
@@ -84,15 +84,15 @@ export class NotesComponent implements OnInit, OnDestroy {
 
   getNotes() {
     let n = this.dataService.getNotes();
-    if (this.pupilId)
-      return n.filter(e => e.id === this.pupilId);
+    if (!isNaN(this.pupilId))
+      return n.filter(e => e.pupilId == this.pupilId);
     else
       return n;
   }
 
   convertToModelDate(d) {
-    this.model.datePicker = {year: d.getFullYear(), month: d.getMonth() + 1, day: d.getDate()};
-    this.model.time = {hour: d.getHours(), minute: d.getMinutes()};
+    this.model.datePicker = { year: d.getFullYear(), month: d.getMonth() + 1, day: d.getDate() };
+    this.model.time = { hour: d.getHours(), minute: d.getMinutes() };
   }
 
   @ViewChild('addNote') addNote;
@@ -100,7 +100,7 @@ export class NotesComponent implements OnInit, OnDestroy {
   add() {
     let d = new Date();
     this.convertToModelDate(d);
-    if(this.pupilId)
+    if (!isNaN(this.pupilId))
       this.model.pupilId = this.pupilId;
     this.modalService.open(this.addNote).result.then((res) => {
       if (res) { //if modal got closed with data
@@ -120,11 +120,11 @@ export class NotesComponent implements OnInit, OnDestroy {
   @ViewChild('deleteQuestion') deleteQuestion; //get template from HTML
   delete(id) {
     this.modalService.open(this.deleteQuestion).result.then((reallyDelete) => {
-        if (reallyDelete)
-          this.dataService.removeNote(id);
-        //workaround because for some reason it wants to open the detail page, but doesn't do it on any other overview page
-        this.location.back(); //TODO: fix this
-      },
+      if (reallyDelete)
+        this.dataService.removeNote(id);
+      //workaround because for some reason it wants to open the detail page, but doesn't do it on any other overview page
+      this.location.back(); //TODO: fix this
+    },
       (reason) => { //dismissed
       });
   }

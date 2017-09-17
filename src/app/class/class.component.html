@@ -13,7 +13,7 @@
           <th>Klassenstufe</th>
           <th></th>
         </tr>
-        <tr class="clickable" *ngFor="let cl of dataService.getClasses()" routerLink="/class/{{cl.id}}">
+        <tr class="clickable" *ngFor="let cl of dataService.getClassesVisible()" routerLink="/class/{{cl.id}}">
           <td>{{cl.name}}</td>
           <td>{{cl.grade}}</td>
           <td>
