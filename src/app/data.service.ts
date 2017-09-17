@@ -59,7 +59,10 @@ export class DataService {
 
   getLoggedInUser() {
     let teacherId = this.getLocalstorage('loggedInUser');
-    return teacherId;
+    let teacher = this.getTeacher(teacherId);
+    if (teacher && !teacher.deleted) //deleted or not existing users can't be logged in
+    { return teacherId; }
+    else return undefined;
   }
 
   setLoggedInUser(teacherId) {
@@ -79,8 +82,12 @@ export class DataService {
       return ret;
   }
 
+  getTeachersVisible() {
+    return this.getTeachers().filter(x => !x.deleted);
+  }
+
   getTeacherList() {
-    let t = this.getTeachers();
+    let t = this.getTeachersVisible();
     t.shift(); //remove root user from List
     t = t.sort((a, b) => a.firstName.localeCompare(b.firstName));
     t = t.sort((a, b) => a.lastName.localeCompare(b.lastName));
@@ -93,7 +100,7 @@ export class DataService {
   }
 
   getTeacherByMail(mail) {
-    return this.getTeachers().find(x => x.mail.toLowerCase() == mail.toLowerCase());
+    return this.getTeachersVisible().find(x => x.mail.toLowerCase() == mail.toLowerCase());
   }
 
   getTeacherName(id) {
@@ -101,11 +108,13 @@ export class DataService {
     return t.firstName + " " + t.lastName;
   }
 
+ 
   removeTeacher(id) {
     let teachers = this.getTeachers();
-    teachers = teachers.filter(e => e.id !== id);
+    teachers.find(e => e.id == id).deleted = true;
     this.saveLocalstorage('teachers', teachers);
   }
+  
 
   addTeacher(fName, lName, mail) {
     let teachers = this.getTeachers();
@@ -157,6 +166,9 @@ export class DataService {
     }
   }
 
+  getClassesVisible() {
+    return this.getClasses().filter(x => !x.deleted);
+  }
   getClass(id) {
     let classes = this.getClasses();
     return classes.filter(e => e.id == id)[0];
@@ -176,12 +188,12 @@ export class DataService {
     c[id] = {id: +id, name: name, grade: grade};
     this.saveLocalstorage('classes', c);
   }
-
   removeClass(id) {
     let c = this.getClasses();
-    c = c.filter(e => e.id !== id);
+    c.find(e => e.id === id).deleted = true;
     this.saveLocalstorage('classes', c);
   }
+  
 
 
   /******************** Pupil **********************/
@@ -226,7 +238,7 @@ export class DataService {
 
   removePupil(id) {
     let p = this.getPupils();
-    p = p.filter(e => e.id !== id);
+    p.find(x=>x.id==id).deleted=true;
     this.saveLocalstorage('pupils', p);
   }
 
@@ -262,6 +274,9 @@ export class DataService {
         this.notes = ret;
       return this.notes;
     }
+  }
+  getNotesVisible() {
+    return this.getNotes().filter(x => !x.deleted);
   }
 
   getNote(id) {
@@ -310,7 +325,8 @@ export class DataService {
 
   removeNote(id) {
     let n = this.getNotes();
-    n = n.filter(e => e.id !== id);
+    n.find(e => e.id === id).deleted = false;
     this.saveLocalstorage('notes', n);
   }
+  
 }
