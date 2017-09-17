@@ -86,6 +86,11 @@ export class DataService {
     return this.getTeachers().find(x => x.mail.toLowerCase() == mail.toLowerCase());
   }
 
+  getTeacherName(id) {
+    let t = this.getTeacher(id);
+    return t.firstName + " " + t.lastName;
+  }
+
   removeTeacher(id) {
     let teachers = this.getTeachers();
     teachers = teachers.filter(e => e.id !== id);
@@ -182,6 +187,11 @@ export class DataService {
   getPupil(id) {
     let pupils = this.getPupils();
     return pupils.filter(e => e.id == id)[0];
+  }
+
+  getPupilName(id) {
+    let p = this.getPupil(id);
+    return p.firstName + " " + p.lastName;
   }
 
   addPupil(firstName, lastName, classId) {

@@ -12,6 +12,7 @@ import {Location} from "@angular/common";
 export class NotesComponent implements OnInit, OnDestroy {
 
   private id: string;
+  private pupilId: string;
   private sub: any;
   notes: any;
   interval: any;
@@ -32,6 +33,7 @@ export class NotesComponent implements OnInit, OnDestroy {
         this.model = this.dataService.getNote(this.id);
         this.convertToModelDate(this.model.date);
       }
+      this.pupilId = params['pId'];
     });
   }
 
@@ -71,12 +73,20 @@ export class NotesComponent implements OnInit, OnDestroy {
     console.log(l);
   }
 
-  @ViewChild('addNote') addNote;
+  getNotes() {
+    let n = this.dataService.getNotes();
+    if (this.pupilId)
+      return n.filter(e => e.id === this.pupilId);
+    else
+      return n;
+  }
 
   convertToModelDate(d) {
     this.model.datePicker = {year: d.getFullYear(), month: d.getMonth() + 1, day: d.getDay() + 1};
     this.model.time = {hour: d.getHours(), minute: d.getMinutes()};
   }
+
+  @ViewChild('addNote') addNote;
 
   add() {
     let d = new Date();

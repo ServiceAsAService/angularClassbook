@@ -1,6 +1,7 @@
 <div *ngIf="!id">
   <div class="container">
-    <h1>Einträgeübersicht</h1>
+    <h1 *ngIf="!pupilId">Einträgeübersicht</h1>
+    <h1 *ngIf="pupilId" >Einträgeübersicht für {{dataService.getPupilName(pupilId)}}</h1>
     <div class="row row-spacing">
       <button class="btn btn-success" (click)="add()">
         <i class="fa fa-plus" aria-hidden="true"></i>
@@ -15,7 +16,7 @@
           <th>Datum</th>
           <th></th>
         </tr>
-        <tr class="clickable" *ngFor="let note of dataService.getNotes()" routerLink="/notes/{{note.id}}">
+        <tr class="clickable" *ngFor="let note of getNotes()" routerLink="/notes/{{note.id}}">
           <td>{{dataService.getNotePupilName(note.id)}}</td>
           <td>{{dataService.getNoteTeacherName(note.id)}}</td>
           <td>

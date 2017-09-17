@@ -21,7 +21,7 @@ const routes: Routes = [
     { path: 'pupil/:id',        component: PupilComponent,     canActivate: [LoginService] },
     { path: 'notes',            component: NotesComponent,     canActivate: [LoginService] },
     { path: 'notes/:id',        component: NotesComponent,     canActivate: [LoginService] },
-    { path: 'notes/pupil/:pId', component: NotesComponent,     canActivate: [LoginService] },
+    { path: 'notes/pupil/:pId', component: NotesComponent,     canActivate: [LoginService], data: [{filter: 'pupil'}] },
     { path: 'dashboard',        component: DashboardComponent, canActivate: [LoginService] }
 ];
 
