@@ -2,28 +2,56 @@ import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { DataService } from "./data.service";
 
+import bcrypt from 'bcryptjs';
+
 @Injectable()
 export class LoginService implements CanActivate {
 
-    loggedIn: boolean = false;
-
     constructor(private router: Router, private dataService: DataService) {
         console.log(dataService);
-        
-     }
 
-    public authenticate(user, pass) {
-        if (user === "admin") {
-            if (pass === "admin") {
-                this.loggedIn = true;
-                return true;
+    }
+    public logOut() {
+        this.dataService.setLoggedInUser(undefined);
+    }
+    public authentificate(email: string, password: string) {
+        console.log("auth");
+        return new Promise((resolve, reject) => {
+            if (email === "Wurzelbenutzer" && password === "Wurzelbenutzer") {
+                this.dataService.setLoggedInUser(0);
+                resolve();
             }
-        }
-        return false;
+            let teacher = this.dataService.getTeacherByMail(email);
+            console.log(teacher);
+            bcrypt.compare(password, teacher.pass)
+                .then((result) => {
+                    if (result) {
+                        this.dataService.setLoggedInUser(teacher.id);
+                        resolve();
+                    }
+                    else {
+                        reject();
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                    reject();
+                });
+        });
+    }
+
+    public setPassword(id, password) {
+        let th = this;
+        return new Promise((resolve, reject) => {
+            bcrypt.hash(password, 10).then(result => {
+                th.dataService.setTeacherPassword(id, result);
+                resolve();
+            })
+                .catch(() => reject());
+        });
     }
 
     public canActivate() {
-        console.log("hey");
         if (!this.isLoggedIn()) {
             this.router.navigate(['/login']);
             return false;

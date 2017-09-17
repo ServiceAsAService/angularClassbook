@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 
 @Injectable()
 export class DataService {
@@ -9,7 +9,12 @@ export class DataService {
   saveLocalstorage(key, data) {
     if (!localStorage.classBook)
       localStorage.classBook = {};
-    localStorage['classBook.' + key] = JSON.stringify(data);
+    if (data) {
+      localStorage['classBook.' + key] = JSON.stringify(data);
+    }
+    else {
+      localStorage.removeItem('classBook.' + key);
+    }
   }
 
   getLocalstorage(key) {
@@ -20,22 +25,22 @@ export class DataService {
 
   generateInitialData() {
     this.saveLocalstorage('teachers', [
-      {id: 0, firstName: 'Lehrer', lastName: '1', mail: 'lehrer.1@schule.de', pass: 'passwort'},
-      {id: 1, firstName: 'Lehrer', lastName: '2', mail: 'lehrer.2@schule.de', pass: 'passwort'},
-      {id: 2, firstName: 'Lehrer', lastName: '3', mail: 'lehrer.3@schule.de', pass: 'passwort'},
+      { id: 0, firstName: 'Lehrer', lastName: '1', mail: 'lehrer.1@schule.de', pass: 'passwort' },
+      { id: 1, firstName: 'Lehrer', lastName: '2', mail: 'lehrer.2@schule.de', pass: 'passwort' },
+      { id: 2, firstName: 'Lehrer', lastName: '3', mail: 'lehrer.3@schule.de', pass: 'passwort' },
     ]);
     this.saveLocalstorage('classes', [
-      {id: 0, name: '5a', grade: 5},
-      {id: 1, name: '5b', grade: 5},
-      {id: 2, name: '6a', grade: 6},
-      {id: 3, name: '7a', grade: 7},
+      { id: 0, name: '5a', grade: 5 },
+      { id: 1, name: '5b', grade: 5 },
+      { id: 2, name: '6a', grade: 6 },
+      { id: 3, name: '7a', grade: 7 },
     ]);
     this.saveLocalstorage('pupils', [
-      {id: 0, firstName: 'Schüler', lastName: '1', classId: 0},
-      {id: 1, firstName: 'Schüler', lastName: '2', classId: 0},
-      {id: 2, firstName: 'Schüler', lastName: '3', classId: 1},
-      {id: 3, firstName: 'Schüler', lastName: '4', classId: 2},
-      {id: 4, firstName: 'Schüler', lastName: '5', classId: 3},
+      { id: 0, firstName: 'Schüler', lastName: '1', classId: 0 },
+      { id: 1, firstName: 'Schüler', lastName: '2', classId: 0 },
+      { id: 2, firstName: 'Schüler', lastName: '3', classId: 1 },
+      { id: 3, firstName: 'Schüler', lastName: '4', classId: 2 },
+      { id: 4, firstName: 'Schüler', lastName: '5', classId: 3 },
     ])
   }
 
@@ -67,23 +72,8 @@ export class DataService {
     return teachers.filter(e => e.id == id)[0];
   }
 
-  addTeacher(fName, lName, mail, pass) {
-    let teachers = this.getTeachers();
-    let id = Math.max.apply(this, teachers.map(e => e.id)) + 1; //generate new id
-    if(id < 0) id = 0; //set id to zero, if no previous id was found
-    let t = {id: id, firstName: fName, lastName: lName, mail: mail, pass: pass};
-    teachers.push(t);
-    this.saveLocalstorage('teachers', teachers);
-  }
-
-  updateTeacher(id, fName, lName, mail, pass) {
-    let t = this.getTeachers();
-    t[id] = {id: id, firstName: fName, lastName: lName, mail: mail, pass: pass};
-    this.saveLocalstorage('teachers', t);
-  }
-
-  updateTeacherObj(obj) {
-    this.updateTeacher(obj.id, obj.firstName, obj.lastName, obj.mail, obj.pass);
+  getTeacherByMail(mail) {
+    return this.getTeachers().find(x => x.mail.toLowerCase() == mail.toLowerCase());
   }
 
   removeTeacher(id) {
@@ -91,19 +81,37 @@ export class DataService {
     teachers = teachers.filter(e => e.id !== id);
     this.saveLocalstorage('teachers', teachers);
   }
+  addTeacher(fName, lName, mail) {
+    let teachers = this.getTeachers();
+    let id = Math.max.apply(this, teachers.map(e => e.id)) + 1; //generate new id
+    if (id < 0) id = 0; //set id to zero, if no previous id was found
 
+    // password unset due to asynchronous encryption
+    let t = { id: id, firstName: fName, lastName: lName, mail: mail, pass: '' };
+    teachers.push(t);
+    this.saveLocalstorage('teachers', teachers);
+    return id;
+  }
   getTeacherPassword(id) {
     let t = this.getTeacher(id);
     return t.password;
   }
-
-  setTeacherPassword(id, pass) {
-    let t = this.getTeacher(id);
-    if(!t) return false;
-    t.pass = pass;
-    this.updateTeacherObj(t);
+  public updateTeacherObj(obj) {
+    this.updateTeacher(obj.id, obj.firstName, obj.lastName, obj.mail);
   }
 
+  updateTeacher(id, fName, lName, mail) {
+    let t = this.getTeachers();
+    // password unset due to asynchronous encryption
+    t[id] = { id: id, firstName: fName, lastName: lName, mail: mail, pass: '' };
+    this.saveLocalstorage('teachers', t);
+  }
+  setTeacherPassword(id, pass) {
+    let t = this.getTeachers();
+    if (!t[id]) return false;
+    t[id].pass = pass;
+    this.saveLocalstorage('teachers', t);
+  }
 
 
   /******************** Class **********************/
@@ -126,15 +134,15 @@ export class DataService {
   addClass(name, grade) {
     let classes = this.getClasses();
     let id = Math.max.apply(this, classes.map(e => e.id)) + 1; //generate new id
-    if(id < 0) id = 0; //set id to zero, if no previous id was found
-    let c = {id: id, name: name, grade: grade};
+    if (id < 0) id = 0; //set id to zero, if no previous id was found
+    let c = { id: id, name: name, grade: grade };
     classes.push(c);
     this.saveLocalstorage('classes', classes);
   }
 
   updateClass(id, name, grade) {
     let c = this.getClasses();
-    c[id] = {id: id, name: name, grade: grade};
+    c[id] = { id: id, name: name, grade: grade };
     this.saveLocalstorage('classes', c);
   }
 
@@ -165,15 +173,15 @@ export class DataService {
   addPupil(firstName, lastName, classId) {
     let pupils = this.getPupils();
     let id = Math.max.apply(this, pupils.map(e => e.id)) + 1; //generate new id
-    if(id < 0) id = 0; //set id to zero, if no previous id was found
-    let p = {id: id, firstName: firstName, lastName: lastName, classId: classId};
+    if (id < 0) id = 0; //set id to zero, if no previous id was found
+    let p = { id: id, firstName: firstName, lastName: lastName, classId: classId };
     pupils.push(p);
     this.saveLocalstorage('pupils', pupils);
   }
 
   updatePupil(id, firstName, lastName, classId) {
     let p = this.getPupils();
-    p[id] = {id: id, firstName: firstName, lastName: lastName, classId: classId};
+    p[id] = { id: id, firstName: firstName, lastName: lastName, classId: classId };
     this.saveLocalstorage('pupils', p);
   }
 
@@ -203,7 +211,7 @@ export class DataService {
         elem.date = new Date(elem.date); //convert date string back to date
         return elem;
       });
-      if(JSON.stringify(this.notes) !== JSON.stringify(ret))
+      if (JSON.stringify(this.notes) !== JSON.stringify(ret))
         this.notes = ret;
       return this.notes;
     }
@@ -223,7 +231,7 @@ export class DataService {
   getNoteCount(pId) {
     let n = this.getNotesOfPupil(pId);
     let c = 0;
-    if(n) c = n.length; //only return length if notes aren't undefined
+    if (n) c = n.length; //only return length if notes aren't undefined
     return c;
   }
 
@@ -242,15 +250,15 @@ export class DataService {
   addNote(pupilId, teacherId, text, date) {
     let notes = this.getNotes();
     let id = Math.max.apply(this, notes.map(e => e.id)) + 1; //generate new id
-    if(id < 0) id = 0; //set id to zero, if no previous id was found
-    let n = {id: id, pupilId: pupilId, teacherId: teacherId, text: text, date: date};
+    if (id < 0) id = 0; //set id to zero, if no previous id was found
+    let n = { id: id, pupilId: pupilId, teacherId: teacherId, text: text, date: date };
     notes.push(n);
     this.saveLocalstorage('notes', notes);
   }
 
   updateNote(id, pupilId, teacherId, text, date) {
     let n = this.getNotes();
-    n[id] = {id: id, pupilId: pupilId, teacherId: teacherId, text: text, date: date};
+    n[id] = { id: id, pupilId: pupilId, teacherId: teacherId, text: text, date: date };
     this.saveLocalstorage('notes', n);
   }
 

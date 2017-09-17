@@ -7,7 +7,7 @@
       <div class="navbar-text">
         Angemeldet als {{dataService.getTeacher(dataService.getLoggedInUser()).firstName}} {{dataService.getTeacher(dataService.getLoggedInUser()).lastName}}
       </div>
-      <a href="#" class="btn btn-outline-danger">Logout</a>
+      <a (click)="logout()" class="btn btn-outline-danger">Logout</a>
     </div>
 
   </div>
