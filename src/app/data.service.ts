@@ -7,9 +7,7 @@ export class DataService {
   }
 
   saveLocalstorage(key, data) {
-    if (!localStorage.classBook)
-      localStorage.classBook = {};
-    if (data) {
+    if (data !== undefined) {
       localStorage['classBook.' + key] = JSON.stringify(data);
     }
     else {
