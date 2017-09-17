@@ -1,7 +1,7 @@
 <div *ngIf="overview()">
   <div class="container">
-    <h1 *ngIf="!pupilId">Einträgeübersicht</h1>
-    <h1 *ngIf="pupilId" >Einträgeübersicht für {{dataService.getPupilName(pupilId)}}</h1>
+    <h1 *ngIf="!pupilView()">Einträgeübersicht</h1>
+    <h1 *ngIf="pupilView()" >Einträgeübersicht für {{dataService.getPupilName(pupilId)}}</h1>
     <div class="row row-spacing">
       <button class="btn btn-success" (click)="add()">
         <i class="fa fa-plus" aria-hidden="true"></i>
