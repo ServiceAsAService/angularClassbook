@@ -12,7 +12,7 @@ import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 })
 export class TeacherComponent implements OnInit, OnDestroy {
 
-  id: string;
+  id: number;
   private sub: any;
 
   model = { firstName: "", lastName: "", mail: "", pass: "" };
@@ -26,8 +26,8 @@ export class TeacherComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
-      this.id = params['id']; //get ID from route parameter
-      if (this.id) {
+      this.id = +params['id']; //get ID from route parameter
+      if (!this.overview()) {
         this.model = this.dataService.getTeacher(this.id);
       }
     });
@@ -39,6 +39,10 @@ export class TeacherComponent implements OnInit, OnDestroy {
 
   formInvalid() {
     return !(this.model.firstName && this.model.lastName && this.model.mail && this.model.pass);
+  }
+
+  overview() {
+    return isNaN(this.id);
   }
 
   add(template) {

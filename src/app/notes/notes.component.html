@@ -1,4 +1,4 @@
-<div *ngIf="!id">
+<div *ngIf="overview()">
   <div class="container">
     <h1 *ngIf="!pupilId">Einträgeübersicht</h1>
     <h1 *ngIf="pupilId" >Einträgeübersicht für {{dataService.getPupilName(pupilId)}}</h1>
@@ -57,7 +57,7 @@
 </div>
 
 
-<div *ngIf="id">
+<div *ngIf="!overview()">
   <div class="container">
     <h1>Eintrag bearbeiten</h1>
     <form class="form-horizontal" (ngSubmit)="update(id)" #modifyNoteForm="ngForm">

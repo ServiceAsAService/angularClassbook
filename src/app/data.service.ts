@@ -46,6 +46,14 @@ export class DataService {
       {id: 2, firstName: 'Schüler', lastName: '3', classId: 1},
       {id: 3, firstName: 'Schüler', lastName: '4', classId: 2},
       {id: 4, firstName: 'Schüler', lastName: '5', classId: 3},
+    ]);
+    this.saveLocalstorage('notes', [
+      {id: 0, pupilId: 0, teacherId: 1, text: "Hat Mitschüler geschlagen.", date: new Date(1505400000000)},
+      {id: 1, pupilId: 0, teacherId: 2, text: "Hat Hausaufgaben 3 Mal nicht gemacht.", date: new Date(1505300000000)},
+      {id: 2, pupilId: 1, teacherId: 1, text: "Hat Tafel mit Edding bemalt.", date: new Date(1505200000000)},
+      {id: 3, pupilId: 1, teacherId: 2, text: "Hat Druckschrift anstatt Schreibschrift geschrieben. Strafarbeit: 5 Seiten Schreibschrift mit Füller.", date: new Date(1505100000000)},
+      {id: 4, pupilId: 1, teacherId: 1, text: "Hat \"Hosenscheißer\" zu Mitschüler gesagt.", date: new Date(1505000000000)},
+      {id: 5, pupilId: 3, teacherId: 3, text: "Schlägt Mitschülerin ins Gesicht.", date: new Date(1504900000000)},
     ])
   }
 
@@ -121,7 +129,7 @@ export class DataService {
   updateTeacher(id, fName, lName, mail) {
     let t = this.getTeachers();
     // password unset due to asynchronous encryption
-    t[id] = {id: id, firstName: fName, lastName: lName, mail: mail, pass: ''};
+    t[id] = {id: +id, firstName: fName, lastName: lName, mail: mail, pass: ''};
     this.saveLocalstorage('teachers', t);
   }
 
@@ -161,7 +169,7 @@ export class DataService {
 
   updateClass(id, name, grade) {
     let c = this.getClasses();
-    c[id] = {id: id, name: name, grade: grade};
+    c[id] = {id: +id, name: name, grade: grade};
     this.saveLocalstorage('classes', c);
   }
 
@@ -198,14 +206,14 @@ export class DataService {
     let pupils = this.getPupils();
     let id = Math.max.apply(this, pupils.map(e => e.id)) + 1; //generate new id
     if (id < 0) id = 0; //set id to zero, if no previous id was found
-    let p = {id: id, firstName: firstName, lastName: lastName, classId: classId};
+    let p = {id: id, firstName: firstName, lastName: lastName, classId: +classId};
     pupils.push(p);
     this.saveLocalstorage('pupils', pupils);
   }
 
   updatePupil(id, firstName, lastName, classId) {
     let p = this.getPupils();
-    p[id] = {id: id, firstName: firstName, lastName: lastName, classId: classId};
+    p[id] = {id: +id, firstName: firstName, lastName: lastName, classId: +classId};
     this.saveLocalstorage('pupils', p);
   }
 
@@ -228,7 +236,8 @@ export class DataService {
   getNotes() {
     let ret = this.getLocalstorage('notes');
     if (!ret) { //no data found in localstorage
-      return [];
+      this.generateInitialData();
+      return this.getNotes();
     }
     else {
       ret = ret.map(elem => {
@@ -239,7 +248,6 @@ export class DataService {
         this.notes = ret;
       return this.notes;
     }
-
   }
 
   getNote(id) {
@@ -275,14 +283,14 @@ export class DataService {
     let notes = this.getNotes();
     let id = Math.max.apply(this, notes.map(e => e.id)) + 1; //generate new id
     if (id < 0) id = 0; //set id to zero, if no previous id was found
-    let n = {id: id, pupilId: pupilId, teacherId: teacherId, text: text, date: date};
+    let n = {id: id, pupilId: +pupilId, teacherId: +teacherId, text: text, date: date};
     notes.push(n);
     this.saveLocalstorage('notes', notes);
   }
 
   updateNote(id, pupilId, teacherId, text, date) {
     let n = this.getNotes();
-    n[id] = {id: id, pupilId: pupilId, teacherId: teacherId, text: text, date: date};
+    n[id] = {id: +id, pupilId: +pupilId, teacherId: +teacherId, text: text, date: date};
     this.saveLocalstorage('notes', n);
   }
 

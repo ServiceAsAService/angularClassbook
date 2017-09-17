@@ -1,4 +1,4 @@
-<div *ngIf="!id">
+<div *ngIf="overview()">
   <div class="container">
     <h1>Klassenübersicht</h1>
     <div class="row row-spacing">
@@ -48,7 +48,7 @@
 </div>
 
 
-<div *ngIf="id">
+<div *ngIf="!overview()">
   <div class="container">
     <h1>Klasse bearbeiten</h1>
     <form class="form-horizontal" (ngSubmit)="update(id)" #modifyClassForm="ngForm">

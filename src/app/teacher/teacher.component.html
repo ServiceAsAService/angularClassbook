@@ -1,4 +1,4 @@
-<div *ngIf="!id">
+<div *ngIf="overview()">
   <div class="container">
     <h1>Lehrerübersicht</h1>
     <div class="row row-spacing">
@@ -50,7 +50,7 @@
 </div>
 
 
-<div *ngIf="id">
+<div *ngIf="!overview()">
   <div class="container">
     <h1>Lehrer bearbeiten</h1>
     <form class="form-horizontal" (ngSubmit)="update(id)" #addTeacherForm="ngForm">

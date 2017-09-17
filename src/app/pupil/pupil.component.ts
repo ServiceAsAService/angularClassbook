@@ -10,7 +10,7 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 })
 export class PupilComponent implements OnInit, OnDestroy {
 
-  private id: string;
+  private id: number;
   private sub: any;
 
   model = {firstName: "", lastName: "", classId: -1};
@@ -23,8 +23,8 @@ export class PupilComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
-      this.id = params['id']; //get ID from route parameter
-      if (this.id) {
+      this.id = +params['id']; //get ID from route parameter
+      if (!this.overview()) {
         this.model = this.dataService.getPupil(this.id);
       }
     });
@@ -39,8 +39,13 @@ export class PupilComponent implements OnInit, OnDestroy {
     return !(m.firstName && m.lastName && m.classId >= 0);
   }
 
+  overview() {
+    return isNaN(this.id);
+  }
+
   @ViewChild('addPupil') addPupil;
   add() {
+    console.log(this.model);
     this.modalService.open(this.addPupil).result.then((res) => {
       if (res) { //if modal got closed with data
         let m = this.model;

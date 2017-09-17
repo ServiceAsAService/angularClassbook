@@ -10,7 +10,7 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 })
 export class ClassComponent implements OnInit, OnDestroy {
 
-  private id: string;
+  private id: number;
   private sub: any;
 
   model = {name: "", grade: 0, classTeacher: ""};
@@ -23,8 +23,8 @@ export class ClassComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
-      this.id = params['id']; //get ID from route parameter
-      if (this.id) {
+      this.id = +params['id']; //get ID from route parameter
+      if (!this.overview()) {
         this.model = this.dataService.getClass(this.id);
       }
     });
@@ -36,6 +36,10 @@ export class ClassComponent implements OnInit, OnDestroy {
 
   formInvalid() {
     return !(this.model.name && this.model.grade);
+  }
+
+  overview() {
+    return isNaN(this.id);
   }
 
   @ViewChild('addClass') addClass;

@@ -11,8 +11,8 @@ import {Location} from "@angular/common";
 })
 export class NotesComponent implements OnInit, OnDestroy {
 
-  private id: string;
-  private pupilId: string;
+  private id: number;
+  private pupilId: number;
   private sub: any;
   notes: any;
   interval: any;
@@ -28,18 +28,23 @@ export class NotesComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
-      this.id = params['id']; //get ID from route parameter
-      if (this.id) {
+      this.id = +params['id']; //get ID from route parameter
+      if (!this.overview()) {
         this.model = this.dataService.getNote(this.id);
-        this.convertToModelDate(this.model.date);
+        if(this.model)
+          this.convertToModelDate(this.model.date);
       }
-      this.pupilId = params['pId'];
+      this.pupilId = +params['pId'];
     });
   }
 
   ngOnDestroy() {
     clearInterval(this.interval);
     this.sub.unsubscribe();
+  }
+
+  overview() {
+    return isNaN(this.id);
   }
 
   goBack() {
@@ -91,6 +96,8 @@ export class NotesComponent implements OnInit, OnDestroy {
   add() {
     let d = new Date();
     this.convertToModelDate(d);
+    if(this.pupilId)
+      this.model.pupilId = this.pupilId;
     this.modalService.open(this.addNote).result.then((res) => {
       if (res) { //if modal got closed with data
         let m = this.model;
