@@ -103,7 +103,7 @@
     <label class="control-label col-sm-4" for="pupil">Lehrer:</label>
     <div class="col-sm-8">
       <select class="form-control" id="teacher" [(ngModel)]="model.teacherId" required>
-        <option *ngFor="let teacher of dataService.getTeachers()" [value]="teacher.id">{{teacher.firstName}}
+        <option *ngFor="let teacher of dataService.getTeacherList()" [value]="teacher.id">{{teacher.firstName}}
           {{teacher.lastName}}
         </option>
       </select>

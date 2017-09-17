@@ -14,7 +14,7 @@
           <th>E-Email</th>
           <th></th>
         </tr>
-        <tr class="clickable" *ngFor="let teacher of dataService.getTeachers()" routerLink="/teacher/{{teacher.id}}">
+        <tr class="clickable" *ngFor="let teacher of dataService.getTeacherList()" routerLink="/teacher/{{teacher.id}}">
           <td>{{teacher.firstName}}</td>
           <td>{{teacher.lastName}}</td>
           <td><a href="mailto:{{teacher.mail}}">{{teacher.mail}}</a></td>
