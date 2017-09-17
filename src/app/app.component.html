@@ -4,7 +4,8 @@
     <span *ngIf="dataService.getLoggedInUser() !== undefined">
       <a class="navbar-brand" routerLink="{{'/teacher'}}">Lehrer</a>
       <a class="navbar-brand " routerLink="{{'/pupil'}}">Schüler</a>
-      <a class="navbar-brand" routerLink="{{'/notes'}}">Notizen</a>
+      <a class="navbar-brand" routerLink="{{'/class'}}">Klassen</a>
+      <a class="navbar-brand" routerLink="{{'/notes'}}">Einträge</a>
     </span>
   </span>
   <div *ngIf="dataService.getLoggedInUser() !== undefined" class="navbar-right">
